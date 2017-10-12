@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import os.log
 
 class CreateMemeViewController: UIViewController,UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
 
@@ -14,12 +15,14 @@ class CreateMemeViewController: UIViewController,UIImagePickerControllerDelegate
     @IBOutlet weak var bottomText: UITextField!
     @IBOutlet weak var actualImage: UIImageView!
     @IBOutlet weak var cameraButton: UIBarButtonItem!
-    @IBOutlet weak var navigationBar: UINavigationBar!
     @IBOutlet weak var toolBar: UIToolbar!
+    @IBOutlet weak var shareButton: UIBarButtonItem!
     
-    
+    // MARK : Properties
+    var meme: Meme?
     var memedObject = [Meme] ()
     var memedImage = UIImage()
+    
     // MARK : Dictionary for text fiel  default attributes
     let memeAttributes: [String: Any] = [NSAttributedStringKey.foregroundColor.rawValue: UIColor.white,
                                          NSAttributedStringKey.strokeColor.rawValue: UIColor.black,
@@ -27,11 +30,22 @@ class CreateMemeViewController: UIViewController,UIImagePickerControllerDelegate
                                          NSAttributedStringKey.strokeWidth.rawValue: -4.0 ]
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureTextFeild(textField: topText, text: "TOP")
-        configureTextFeild(textField: bottomText, text: "BOTTOM")
-        actualImage.image = #imageLiteral(resourceName: "image")
-        cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
+        
+        if let m = meme {
+            
+            configureTextFeild(textField: topText, text: m.topText)
+            configureTextFeild(textField: bottomText, text: m.bottomText)
+            actualImage.image = m.oldImage
+        } else {
+            configureTextFeild(textField: topText, text: "TOP")
+            configureTextFeild(textField: bottomText, text: "BOTTOM")
+            actualImage.image = #imageLiteral(resourceName: "defaultPhoto")
+            cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
+            shareButton.isEnabled = false
+        }
+        
     }
+    
     
     // MARK : Configure text field
     func configureTextFeild(textField : UITextField, text : String) {
@@ -72,7 +86,7 @@ class CreateMemeViewController: UIViewController,UIImagePickerControllerDelegate
         shareMemeImage.completionWithItemsHandler = { (activityType: UIActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) -> Void in
             if completed{
                 self.save()
-                self.reset()
+                self.performSegue(withIdentifier: "unwind", sender: self)
             }
         }
         present(shareMemeImage, animated: true, completion: nil)
@@ -80,19 +94,37 @@ class CreateMemeViewController: UIViewController,UIImagePickerControllerDelegate
     
     // MARK : Set to default values
     @IBAction func ResetMemeView(_ sender: Any) {
-        reset()
+        let isPresentingInAddMode = presentingViewController is UINavigationController
+        if isPresentingInAddMode {
+            dismiss(animated: true, completion: nil)
+        }
+        else if let owningViewController = navigationController {
+            owningViewController.popViewController(animated: true)
+            dismiss(animated: true, completion: nil)
+        }
+        else {
+            fatalError("The CreateMemeViewController is not inside a navigation controller.")
+        }
+        
+//        reset()
+//       //navigationController.popToRootViewController(animated: true)
+//        print()
+//        NotificationCenter.default.addObserver(self, selector: Selector(("loadList:")),name:NSNotification.Name(rawValue: "load"), object: nil)
+//        dismiss(animated: true, completion: nil)
     }
     
+    // Not required delete
     func reset( ){
         self.topText.text = "TOP"
         self.bottomText.text = "BOTTOM"
-        self.actualImage.image = #imageLiteral(resourceName: "image")
+        self.actualImage.image = #imageLiteral(resourceName: "defaultPhoto")
     }
-    //MARK : Image picker delegate menthods
     
+    //MARK : Image picker delegate menthods
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
             self.actualImage.image = image
+            shareButton.isEnabled = true
         }
         dismiss(animated: true, completion: nil)
     }
@@ -100,11 +132,6 @@ class CreateMemeViewController: UIViewController,UIImagePickerControllerDelegate
     // MARK : Dismiss image picker
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)
-    }
-    
-    // MARK : Update frame
-    func updateViewframe( frameOrigin : CGFloat) {
-        view.frame.origin.y = frameOrigin
     }
     
     // MARK : Text Delegate functions
@@ -171,16 +198,19 @@ class CreateMemeViewController: UIViewController,UIImagePickerControllerDelegate
         return keyboardSize.cgRectValue.height
     }
     
+    // Update frame
+    func updateViewframe( frameOrigin : CGFloat) {
+        view.frame.origin.y = frameOrigin
+    }
+    
     // MARK : Generate Memed Image
     
     func generateMemedImage () -> UIImage {
         // Render View to image
-        self.navigationBar.isHidden = true
         self.toolBar.isHidden = true
         UIGraphicsBeginImageContext(self.view.frame.size)
         view.drawHierarchy(in: self.view.frame, afterScreenUpdates: true)
         let memedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
-        self.navigationBar.isHidden = false
         self.toolBar.isHidden = false
         return memedImage
     }
@@ -188,7 +218,11 @@ class CreateMemeViewController: UIViewController,UIImagePickerControllerDelegate
     // MARK : Save meme Object
     
     func save () {
-        let meme = Meme(topText: topText.text!, bottomText: bottomText.text!, oldImage: actualImage.image!, memeImage: memedImage)
-        memedObject.append(meme)
+        meme = Meme(topText: topText.text!, bottomText: bottomText.text!, oldImage: actualImage.image!, memeImage: memedImage)
+        
+        //        memedObject.append(meme)
+//        let object = UIApplication.shared.delegate
+//        let appDelegate = object as! AppDelegate
+//        appDelegate.memes.append(meme)
     }
 }

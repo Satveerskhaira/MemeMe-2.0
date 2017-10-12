@@ -12,6 +12,7 @@ private let reuseIdentifier = "Cell"
 
 class CollectionViewController: UICollectionViewController {
 
+@IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -20,8 +21,13 @@ class CollectionViewController: UICollectionViewController {
 
         // Register cell classes
         self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-
-        // Do any additional setup after loading the view.
+        let flowLayout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        let space:CGFloat = 3.0
+        let dimension = (view.frame.size.width - (2 * space)) / 3.0
+        
+        flowLayout.minimumInteritemSpacing = space
+        flowLayout.minimumLineSpacing = space
+        flowLayout.itemSize = CGSize(width: dimension, height: dimension)        // Do any additional setup after loading the view.
         print("Collection")
     }
 
@@ -59,16 +65,16 @@ class CollectionViewController: UICollectionViewController {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionCell", for: indexPath) as? CollectionViewCell else {
             fatalError("Error")
         }
-        //cell.backgroundColor = UIColor.green
-        cell.memeMeThumbNail.image = #imageLiteral(resourceName: "image")
-        cell.memeMeText.text = "Hello Collectio"
+        
+        cell.memeImage.image = #imageLiteral(resourceName: "image")
         return cell
     }
     
     //MARK: - Create Meme
     
     @IBAction func createMeme(_ sender: Any) {
-        
+        let viewController = storyboard?.instantiateViewController(withIdentifier: "createMemeViewController") as? CreateMemeViewController
+        present(viewController!, animated: true, completion: nil)
     }
     
     // MARK: UICollectionViewDelegate
@@ -101,5 +107,11 @@ class CollectionViewController: UICollectionViewController {
     
     }
     */
-
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let viewController = storyboard?.instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController
+        
+        //viewController?.memeImage.image = #imageLiteral(resourceName: "image")
+        self.navigationController?.pushViewController(viewController!, animated: true)
+    }
 }

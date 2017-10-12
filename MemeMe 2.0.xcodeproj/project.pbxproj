@@ -110,6 +110,8 @@
 			isa = PBXGroup;
 			children = (
 				D86C9EC11F2529BB009B7A46 /* AppDelegate.swift */,
+				D81873ED1F64E96C00655864 /* CreateMemeViewController.swift */,
+				D894DF2B1F65119E0020ABB8 /* DetailViewController.swift */,
 				D86C9EEF1F252D5E009B7A46 /* TableViewController.swift */,
 				D86C9EF51F252D92009B7A46 /* TableViewCell.swift */,
 				D86C9EF11F252D72009B7A46 /* CollectionViewController.swift */,
@@ -119,8 +121,6 @@
 				D86C9ECA1F2529BB009B7A46 /* LaunchScreen.storyboard */,
 				D81873EF1F64EB8B00655864 /* Meme.swift */,
 				D86C9ECD1F2529BB009B7A46 /* Info.plist */,
-				D81873ED1F64E96C00655864 /* CreateMemeViewController.swift */,
-				D894DF2B1F65119E0020ABB8 /* DetailViewController.swift */,
 			);
 			path = "MemeMe 2.0";
 			sourceTree = "<group>";
