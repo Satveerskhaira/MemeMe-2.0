@@ -20,7 +20,6 @@ class CreateMemeViewController: UIViewController,UIImagePickerControllerDelegate
     
     // MARK : Properties
     var meme: Meme?
-    var memedObject = [Meme] ()
     var memedImage = UIImage()
     
     // MARK : Dictionary for text fiel  default attributes
@@ -219,10 +218,5 @@ class CreateMemeViewController: UIViewController,UIImagePickerControllerDelegate
     
     func save () {
         meme = Meme(topText: topText.text!, bottomText: bottomText.text!, oldImage: actualImage.image!, memeImage: memedImage)
-        
-        //        memedObject.append(meme)
-//        let object = UIApplication.shared.delegate
-//        let appDelegate = object as! AppDelegate
-//        appDelegate.memes.append(meme)
     }
 }

@@ -12,8 +12,9 @@ import os.log
 class TableViewController: UITableViewController {
 
     
-    var memes: [Meme]!
-    
+    //var memes: [Meme]!
+    var memes = [Meme] ()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -24,9 +25,14 @@ class TableViewController: UITableViewController {
          self.navigationItem.leftBarButtonItem = self.editButtonItem
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        
         memes = appDelegate.memes
     }
-
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tableView.reloadData()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -105,13 +111,6 @@ class TableViewController: UITableViewController {
     }
      */
     
-    // MARK: - Create Meme
-        
-    @IBAction func createMeme(_ sender: Any) {
-        let viewController = storyboard?.instantiateViewController(withIdentifier: "createMemeViewController") as? CreateMemeViewController
-        present(viewController!, animated: true, completion: nil)
-   
-    }
     
     // MARK: - Navigation
 
@@ -147,13 +146,16 @@ class TableViewController: UITableViewController {
             if let selectedIndexPath = tableView.indexPathForSelectedRow {
                 // Update an existing meal.
                 memes[selectedIndexPath.row] = meme
-                tableView.reloadRows(at: [selectedIndexPath], with: .none)
+                //tableView.reloadRows(at: [selectedIndexPath], with: .none)
             } else {
                 
                 //Add a new meal
                 let newIndexPath = IndexPath(row: memes.count, section: 0)
                 memes.append(meme)
-                tableView.insertRows(at: [newIndexPath], with: .automatic)
+                let object = UIApplication.shared.delegate
+                let appDelegate = object as! AppDelegate
+                appDelegate.memes.append(meme)
+                //tableView.insertRows(at: [newIndexPath], with: .automatic)
             }
         }
     }
