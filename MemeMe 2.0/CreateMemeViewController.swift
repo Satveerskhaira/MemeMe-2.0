@@ -19,7 +19,7 @@ class CreateMemeViewController: UIViewController,UIImagePickerControllerDelegate
     @IBOutlet weak var shareButton: UIBarButtonItem!
     
     // MARK : Properties
-    var meme: Meme?
+    var meme: Meme!
     var memedImage = UIImage()
     
     // MARK : Dictionary for text fiel  default attributes
@@ -30,6 +30,7 @@ class CreateMemeViewController: UIViewController,UIImagePickerControllerDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Set meme for editing
         if let m = meme {
             
             configureTextFeild(textField: topText, text: m.topText)
@@ -104,19 +105,6 @@ class CreateMemeViewController: UIViewController,UIImagePickerControllerDelegate
         else {
             fatalError("The CreateMemeViewController is not inside a navigation controller.")
         }
-        
-//        reset()
-//       //navigationController.popToRootViewController(animated: true)
-//        print()
-//        NotificationCenter.default.addObserver(self, selector: Selector(("loadList:")),name:NSNotification.Name(rawValue: "load"), object: nil)
-//        dismiss(animated: true, completion: nil)
-    }
-    
-    // Not required delete
-    func reset( ){
-        self.topText.text = "TOP"
-        self.bottomText.text = "BOTTOM"
-        self.actualImage.image = #imageLiteral(resourceName: "defaultPhoto")
     }
     
     //MARK : Image picker delegate menthods

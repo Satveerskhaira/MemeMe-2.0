@@ -105,7 +105,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="DL1-Ss-PKS">
-                            <size key="itemSize" width="183" height="104"/>
+                            <size key="itemSize" width="132" height="104"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -127,14 +127,44 @@
                                                 <constraint firstAttribute="width" secondItem="Yvh-UP-G97" secondAttribute="height" multiplier="1:1" id="SiG-d0-fev"/>
                                             </constraints>
                                         </imageView>
+                                        <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qVk-uF-B5g">
+                                            <rect key="frame" x="8" y="8" width="20" height="20"/>
+                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="8WJ-gV-KfW">
+                                                <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ujt-Ov-tbP">
+                                                        <rect key="frame" x="4" y="4" width="12" height="12"/>
+                                                        <state key="normal" image="delete"/>
+                                                        <connections>
+                                                            <action selector="deleteCell:" destination="C4U-Af-Lod" eventType="touchUpInside" id="kZ7-3F-4HX"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="bottom" secondItem="Ujt-Ov-tbP" secondAttribute="bottom" constant="4" id="7Q4-1K-oUp"/>
+                                                    <constraint firstItem="Ujt-Ov-tbP" firstAttribute="top" secondItem="8WJ-gV-KfW" secondAttribute="top" constant="4" id="aKW-pM-r5p"/>
+                                                    <constraint firstAttribute="trailing" secondItem="Ujt-Ov-tbP" secondAttribute="trailing" constant="4" id="gMc-vf-xv3"/>
+                                                    <constraint firstItem="Ujt-Ov-tbP" firstAttribute="leading" secondItem="8WJ-gV-KfW" secondAttribute="leading" constant="4" id="gcn-0d-sRa"/>
+                                                </constraints>
+                                            </view>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="20" id="4le-eW-wJs"/>
+                                                <constraint firstAttribute="width" constant="20" id="nyS-xU-Pj6"/>
+                                            </constraints>
+                                            <blurEffect style="extraLight"/>
+                                        </visualEffectView>
                                     </subviews>
                                 </view>
                                 <constraints>
+                                    <constraint firstItem="qVk-uF-B5g" firstAttribute="top" secondItem="C4U-Af-Lod" secondAttribute="topMargin" constant="8" id="79j-2p-VQe"/>
                                     <constraint firstItem="Yvh-UP-G97" firstAttribute="leading" secondItem="C4U-Af-Lod" secondAttribute="leading" id="8OL-al-WtU"/>
                                     <constraint firstItem="Yvh-UP-G97" firstAttribute="top" secondItem="C4U-Af-Lod" secondAttribute="top" id="NDG-Df-GfW"/>
+                                    <constraint firstItem="qVk-uF-B5g" firstAttribute="leading" secondItem="C4U-Af-Lod" secondAttribute="leadingMargin" constant="8" id="sWE-EA-CDX"/>
                                 </constraints>
                                 <size key="customSize" width="104" height="104"/>
                                 <connections>
+                                    <outlet property="deleteButtonBlurView" destination="qVk-uF-B5g" id="gtI-aR-2BP"/>
                                     <outlet property="memeImage" destination="Yvh-UP-G97" id="YLk-a3-o70"/>
                                     <segue destination="xVw-c3-DRi" kind="show" identifier="ShowCollection" id="u3L-AZ-J2v"/>
                                 </connections>
@@ -152,6 +182,10 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="addBarButton" destination="xRE-wX-EAO" id="49S-jO-NJv"/>
+                        <outlet property="detailShow" destination="cX8-tv-Gvs" id="r1U-Ck-Ctf"/>
+                    </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4D4-k4-t3a" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -308,6 +342,9 @@
             <point key="canvasLocation" x="1732" y="363"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="delete" width="16" height="16"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="4Nq-51-xvE"/>
         <segue reference="u3L-AZ-J2v"/>

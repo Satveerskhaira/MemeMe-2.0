@@ -12,105 +12,77 @@ import os.log
 private let reuseIdentifier = "Cell"
 
 class CollectionViewController: UICollectionViewController {
-
-@IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
+    
+    @IBOutlet weak var addBarButton : UIBarButtonItem!
+    @IBOutlet var detailShow: UICollectionView!
+    @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     var memes = [Meme] ()
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.leftBarButtonItem = self.editButtonItem
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Register cell classes
-//        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-//        let flowLayout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-//        let space:CGFloat = 3.0
-//        let dimension = (view.frame.size.width - (2 * space)) / 3.0
-//
-//        flowLayout.minimumInteritemSpacing = space
-//        flowLayout.minimumLineSpacing = space
-//        flowLayout.itemSize = CGSize(width: dimension, height: dimension)        // Do any additional setup after loading the view.
-//        print("Collection")
-        
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        // Set Cell layout
+        let itemSize = UIScreen.main.bounds.width/3 - 10
+        let layout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsetsMake(20, 0, 10, 0)
+        layout.itemSize = CGSize(width: itemSize, height: itemSize)
+        layout.minimumInteritemSpacing = 10
+        layout.minimumLineSpacing = 10
+        detailShow.collectionViewLayout = layout
        
         appDelegate.memes.append(Meme(topText: "hellow", bottomText: "World", oldImage: #imageLiteral(resourceName: "defaultPhoto"), memeImage: #imageLiteral(resourceName: "defaultPhoto")))
-        memes = appDelegate.memes
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        //Reload collection
         self.collectionView!.reloadData()
     }
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     
-
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
-        return memes.count
+        // Number if cell based on memes array record.
+        return appDelegate.memes.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionCell", for: indexPath) as? CollectionViewCell else {
             fatalError("Error")
         }
-        
-        let meme = memes[indexPath.row]
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let meme = appDelegate.memes[indexPath.row]
         cell.memeImage.image = meme.memeImage
+        cell.delegate = self
         return cell
     }
     
-    // MARK: UICollectionViewDelegate
-
     
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-
-
+    // MARK : Editing
     
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        print(indexPath)
-        return true
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(animated, animated: true)
+        addBarButton.isEnabled = !editing
+        //Change Left bar button
+        if !editing {
+            self.editButtonItem.title = "Edit"
+        }
+        if let indexPaths = collectionView?.indexPathsForVisibleItems {
+            for indexPath in indexPaths {
+                if let cell = collectionView?.cellForItem(at: indexPath) as? CollectionViewCell {
+                    cell.isEditing = editing
+                }
+            }
+        }
     }
-    
 
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
 
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-    
-    }
-    */
-    /*
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let viewController = storyboard?.instantiateViewController(withIdentifier: "createMemeViewController") as? CreateMemeViewController
-        self.navigationController?.pushViewController(viewController!, animated: true)
-    }
-     */
-    
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -122,6 +94,7 @@ class CollectionViewController: UICollectionViewController {
         case "AddCollection":
             os_log("Adding a new meme.", log: OSLog.default, type: .debug)
         case "ShowCollection":
+        
             guard let createDetailViewController = segue.destination as? CreateMemeViewController else {
                 fatalError("Unexpected destination: \(segue.destination)")
             }
@@ -132,7 +105,7 @@ class CollectionViewController: UICollectionViewController {
             //guard let indexPath = tableView.indexPath(for: selectMealCell) else {
                 fatalError("The selected cell is not being displayed by the table")
             }
-            let memeCell = memes[indexPath.row]
+            let memeCell = appDelegate.memes[indexPath.row]
             createDetailViewController.meme = memeCell
         default:
             fatalError("Unexpected Segue Identifier; \(segue.identifier ?? " ")")
@@ -142,29 +115,30 @@ class CollectionViewController: UICollectionViewController {
     // MARK: Action
     @IBAction func unwindToMealList(sender: UIStoryboardSegue) {
         if let sourceViewController = sender.source as? CreateMemeViewController, let meme = sourceViewController.meme {
-            let indexPaths = collectionView!.indexPathsForSelectedItems
-            let firstIndexPath = indexPaths![0] as NSIndexPath
-            print(firstIndexPath)
-            guard let p = indexPaths?.count else {
-                fatalError("Error")
+            guard let indexPaths = collectionView!.indexPathsForSelectedItems else {
+                fatalError("error")
             }
-            if p > 0 {
-                
-                //Update an existing meal
-                memes[p] = meme
-                collectionView!.reloadItems(at: indexPaths!)
-            }
-            else {
-
-                //Add a new meal
-                let newIndexPath = IndexPath(row: memes.count, section: 0)
-                memes.append(meme)
-                let object = UIApplication.shared.delegate
-                let appDelegate = object as! AppDelegate
+            let p = indexPaths.last?.row
+            if indexPaths.isEmpty {
+                //Add new meme
                 appDelegate.memes.append(meme)
-                collectionView?.insertItems(at: [newIndexPath])
-                
+            } else {
+                //Update existing Meme
+                appDelegate.memes[p!] = meme
             }
+            
+        }
+    }
+}
+
+//MARK : Make collectionView Delegate of cell
+extension CollectionViewController: CollectionViewCellDelegate {
+    func deleteFunction(memeCell: CollectionViewCell) {
+        if let indexPath = collectionView?.indexPath(for: memeCell) {
+            // Delete data from meme array data source
+                appDelegate.memes.remove(at: indexPath.row)
+            // Delele cell from selected index path
+            collectionView?.deleteItems(at: [indexPath])
         }
     }
 }
