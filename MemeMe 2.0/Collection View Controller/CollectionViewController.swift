@@ -31,7 +31,7 @@ class CollectionViewController: UICollectionViewController {
         layout.minimumLineSpacing = 10
         detailShow.collectionViewLayout = layout
        
-        appDelegate.memes.append(Meme(topText: "hellow", bottomText: "World", oldImage: #imageLiteral(resourceName: "defaultPhoto"), memeImage: #imageLiteral(resourceName: "defaultPhoto")))
+        appDelegate.memes.append(Meme(topText: "Hello", bottomText: "World", oldImage: #imageLiteral(resourceName: "defaultPhoto"), memeImage: #imageLiteral(resourceName: "defaultPhoto")))
     }
     
     override func viewWillAppear(_ animated: Bool) {

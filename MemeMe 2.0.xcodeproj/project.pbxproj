@@ -110,16 +110,12 @@
 			isa = PBXGroup;
 			children = (
 				D86C9EC11F2529BB009B7A46 /* AppDelegate.swift */,
-				D81873ED1F64E96C00655864 /* CreateMemeViewController.swift */,
-				D894DF2B1F65119E0020ABB8 /* DetailViewController.swift */,
-				D86C9EEF1F252D5E009B7A46 /* TableViewController.swift */,
-				D86C9EF51F252D92009B7A46 /* TableViewCell.swift */,
-				D86C9EF11F252D72009B7A46 /* CollectionViewController.swift */,
-				D81873F11F65067300655864 /* CollectionViewCell.swift */,
-				D86C9EC51F2529BB009B7A46 /* Main.storyboard */,
-				D86C9EC81F2529BB009B7A46 /* Assets.xcassets */,
-				D86C9ECA1F2529BB009B7A46 /* LaunchScreen.storyboard */,
 				D81873EF1F64EB8B00655864 /* Meme.swift */,
+				D89DEF061F9E5BC50018D0D4 /* Screens */,
+				D89DEF051F9E5B990018D0D4 /* Detail View controller */,
+				D89DEF041F9E5B790018D0D4 /* Collection View Controller */,
+				D89DEF031F9E5B630018D0D4 /* Table View controller */,
+				D86C9EC81F2529BB009B7A46 /* Assets.xcassets */,
 				D86C9ECD1F2529BB009B7A46 /* Info.plist */,
 			);
 			path = "MemeMe 2.0";
@@ -141,6 +137,42 @@
 				D86C9EE31F2529BB009B7A46 /* Info.plist */,
 			);
 			path = "MemeMe 2.0UITests";
+			sourceTree = "<group>";
+		};
+		D89DEF031F9E5B630018D0D4 /* Table View controller */ = {
+			isa = PBXGroup;
+			children = (
+				D86C9EEF1F252D5E009B7A46 /* TableViewController.swift */,
+				D86C9EF51F252D92009B7A46 /* TableViewCell.swift */,
+			);
+			path = "Table View controller";
+			sourceTree = "<group>";
+		};
+		D89DEF041F9E5B790018D0D4 /* Collection View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				D86C9EF11F252D72009B7A46 /* CollectionViewController.swift */,
+				D81873F11F65067300655864 /* CollectionViewCell.swift */,
+			);
+			path = "Collection View Controller";
+			sourceTree = "<group>";
+		};
+		D89DEF051F9E5B990018D0D4 /* Detail View controller */ = {
+			isa = PBXGroup;
+			children = (
+				D81873ED1F64E96C00655864 /* CreateMemeViewController.swift */,
+				D894DF2B1F65119E0020ABB8 /* DetailViewController.swift */,
+			);
+			path = "Detail View controller";
+			sourceTree = "<group>";
+		};
+		D89DEF061F9E5BC50018D0D4 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				D86C9ECA1F2529BB009B7A46 /* LaunchScreen.storyboard */,
+				D86C9EC51F2529BB009B7A46 /* Main.storyboard */,
+			);
+			path = Screens;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

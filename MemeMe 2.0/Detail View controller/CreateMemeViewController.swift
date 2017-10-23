@@ -43,7 +43,6 @@ class CreateMemeViewController: UIViewController,UIImagePickerControllerDelegate
             cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
             shareButton.isEnabled = false
         }
-        
     }
     
     
