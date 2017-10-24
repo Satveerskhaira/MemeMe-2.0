@@ -31,7 +31,7 @@ class CollectionViewController: UICollectionViewController {
         layout.minimumLineSpacing = 10
         detailShow.collectionViewLayout = layout
        
-        appDelegate.memes.append(Meme(topText: "Hello", bottomText: "World", oldImage: #imageLiteral(resourceName: "defaultPhoto"), memeImage: #imageLiteral(resourceName: "defaultPhoto")))
+        appDelegate.memes.append(Meme(topText: "Hello", bottomText: "World", oldImage: #imageLiteral(resourceName: "Original") , memeImage: #imageLiteral(resourceName: "memed")))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -87,29 +87,12 @@ class CollectionViewController: UICollectionViewController {
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        super.prepare(for: segue, sender: sender)
-        // Get the new view controller using segue.destinationViewController.
-        switch (segue.identifier ?? "") {
-        case "AddCollection":
-            os_log("Adding a new meme.", log: OSLog.default, type: .debug)
-        case "ShowCollection":
-        
-            guard let createDetailViewController = segue.destination as? CreateMemeViewController else {
-                fatalError("Unexpected destination: \(segue.destination)")
-            }
-            guard let selectMealCell = sender as? CollectionViewCell else {
-                fatalError("Unexpected sender: \(sender ?? " ")")
-            }
-            guard let indexPath = collectionView?.indexPath(for: selectMealCell) else {
-            //guard let indexPath = tableView.indexPath(for: selectMealCell) else {
-                fatalError("The selected cell is not being displayed by the table")
-            }
-            let memeCell = appDelegate.memes[indexPath.row]
-            createDetailViewController.meme = memeCell
-        default:
-            fatalError("Unexpected Segue Identifier; \(segue.identifier ?? " ")")
-        }
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // Setup Image for detail view controller.
+        let detailViewController = self.storyboard?.instantiateViewController(withIdentifier: "DetailView") as! DetailViewController
+        let memeCell = appDelegate.memes[indexPath.row]
+        detailViewController.image = memeCell.memeImage
+        self.navigationController?.pushViewController(detailViewController, animated: true)
     }
     
     // MARK: Action

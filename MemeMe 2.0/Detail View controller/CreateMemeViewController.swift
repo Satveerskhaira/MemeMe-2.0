@@ -25,7 +25,7 @@ class CreateMemeViewController: UIViewController,UIImagePickerControllerDelegate
     // MARK : Dictionary for text fiel  default attributes
     let memeAttributes: [String: Any] = [NSAttributedStringKey.foregroundColor.rawValue: UIColor.white,
                                          NSAttributedStringKey.strokeColor.rawValue: UIColor.black,
-                                         NSAttributedStringKey.font.rawValue: UIFont(name: "HelveticaNeue-CondensedBlack", size: 20)!,
+                                         NSAttributedStringKey.font.rawValue: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
                                          NSAttributedStringKey.strokeWidth.rawValue: -4.0 ]
     override func viewDidLoad() {
         super.viewDidLoad()
